@@ -68,11 +68,29 @@ class Zoo():
     def __init__(self):
         self.animals=[]
         self.staff=[]
-        with open('zoo.txt','r',encoding='utf-8') as file:
+        self.read_file()
+    def add_animal(self,animal):
+        self.animals.append(animal)
+        self.save_file()
+        print(f'В зоопарк добавлено новое животное - {animal.name}')
+    def add_employee(self,employee):
+        self.staff.append(employee)
+        print(f'В зоопарк добавлен новый сотрудник - {employee.__class__.__name__}')
+    def list_animals(self):
+        for animal in self.animals:
+            print(f'{animal.__class__.__name__} - {animal.name}, возраст - {animal.age}')
+
+    def save_file(self):
+        with open('zoo.txt', 'w',encoding='utf-8') as file:
+            for animal in self.animals:
+                file.write(repr(animal) + '\n')
+    def read_file(self):
+        self.animals = []
+        with open('zoo.txt', 'r', encoding='utf-8') as file:
             for line in file:
-                parts=line.strip().split(':')
+                parts = line.strip().split(':')
                 if len(parts) == 3:
-                    class_name, name, age =parts
+                    class_name, name, age = parts
                     age = int(age)
                     if class_name == 'Bird':
                         animal = Bird(name, age)
@@ -83,25 +101,13 @@ class Zoo():
                     else:
                         continue
                     self.animals.append(animal)
-    def add_animal(self,animal):
-        self.animals.append(animal)
-        with open('zoo.txt', 'w',encoding='utf-8') as file:
-            for animal in self.animals:
-                file.write(repr(animal) + '\n')
-        print(f'В зоопарк добавлено новое животное - {animal.name}')
-    def add_employee(self,employee):
-        self.staff.append(employee)
-        print(f'В зоопарк добавлен новый сотрудник - {employee.__class__.__name__}')
-    def list_animals(self):
-        for animal in self.animals:
-            print(f'{animal.__class__.__name__} - {animal.name}, возраст - {animal.age}')
 
 
-class ZooKeeper(Zoo):
+class ZooKeeper():
     def feed_animal(self,animal):
         print(f'Смотритель кормит {animal.name}')
 
-class Veterinarian(Zoo):
+class Veterinarian():
     def heal_animal(self,animal):
         print(f'Ветеринар лечит {animal.name}')
 
